@@ -1,4 +1,4 @@
-# 🏨 Travel Booking API
+# 🏨 Hotel Booking API
 
 API RESTful para gerenciamento de reservas de hotéis. Permite cadastro de usuários, hotéis, quartos, reservas, cancelamentos e envio de e-mails de confirmação.
 
