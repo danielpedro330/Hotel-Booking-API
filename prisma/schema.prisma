@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
+  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -24,9 +24,11 @@ model User {
   name      String
   email     String   @unique
   password  String
-  rule Rule
+  rule Rule @default(Member)
   reservations Reservation[]
   createdAt DateTime @default(now())
+
+  @@map("users")
 }
 
 model Hotel {
@@ -36,6 +38,8 @@ model Hotel {
   imageUrl  String?
   rooms     Room[]
   createdAt DateTime @default(now())
+
+  @@map("hotels")
 }
 
 model Room {
@@ -47,16 +51,22 @@ model Room {
   imageUrl  String?
   hotel     Hotel    @relation(fields: [hotelId], references: [id])
   reservations Reservation[]
+
+  @@map("rooms")
 }
 
 model Reservation {
   id         String   @id @default(uuid())
-  userId     String
-  roomId     String
   startDate  DateTime
   endDate    DateTime
   status     String 
   createdAt  DateTime @default(now())
+
   user       User     @relation(fields: [userId], references: [id])
+  userId     String
+
   room       Room     @relation(fields: [roomId], references: [id])
+  roomId     String
+
+  @@map("reservations")
 }

@@ -28,7 +28,7 @@ API RESTful para gerenciamento de reservas de hotéis. Permite cadastro de usuá
 📅 Reservas
 - Verificação de disponibilidade por data
 - Criação de reserva
-- Cancelamento com validação de política (ex: 24h antes)
+- Cancelamento com validação de política (ex: 48h antes)
 - Envio de e-mail de confirmação
 
 ---
