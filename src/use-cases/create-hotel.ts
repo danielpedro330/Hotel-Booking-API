@@ -5,7 +5,8 @@ import cloudinary from "@/lib/cloudinary";
 interface HotelUseCaseRequest {
     name: string;
     location: string;
-    file?: { file: NodeJS.ReadableStream };
+    file?: { file: NodeJS.ReadableStream } | null; // multipart
+    imageUrl?: string | null; // criação via JSON
 }
 
 interface HotelUseCaseResponse {
@@ -18,32 +19,33 @@ export class HotelUseCase {
     async execute({
         name,
         location,
-        file
+        file,
+        imageUrl
     }: HotelUseCaseRequest): Promise<HotelUseCaseResponse> {
 
-        let imageUrl: string | null = null;
+        let finalImageUrl: string | null = imageUrl ?? null;
 
-        // Se tiver imagem, faz upload no Cloudinary
-        if (file) {
-            const uploadResult = await new Promise((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream(
+        // → Se houver arquivo, envia para Cloudinary
+        if (file?.file) {
+            const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
+                const upload = cloudinary.uploader.upload_stream(
                     { folder: "hotels" },
                     (err, res) => {
-                        if (err) reject(err);
-                        else resolve(res);
+                        if (err) return reject(err);
+                        resolve(res as { secure_url: string });
                     }
                 );
 
-                file.file.pipe(stream);
+                file.file.pipe(upload);
             });
 
-            imageUrl = (uploadResult as any).secure_url;
+            finalImageUrl = uploadResult.secure_url;
         }
 
         const hotel = await this._hotelRepository.create({
             name,
             location,
-            imageUrl
+            imageUrl: finalImageUrl
         });
 
         return { hotel };

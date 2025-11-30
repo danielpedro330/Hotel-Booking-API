@@ -21,5 +21,22 @@ export default defineConfig({
           environment: "node",
         },
       }),
+
+      // E2E
+      defineConfig({
+        plugins: [tsconfigPaths()],
+        resolve: {
+          alias: {
+            "@": path.resolve(__dirname, "./src"),
+          },
+        },
+        test: {
+          name: "e2e",
+          include: ["src/http/controllers/**/*.spec.ts"],
+          environment: "node",
+          setupFiles: ["./vitest.setup.ts"],
+          testTimeout: 10000,
+        },
+      })
 ]}
 })

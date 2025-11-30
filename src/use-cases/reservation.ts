@@ -56,6 +56,10 @@ export class ReservationUseCase {
             status
         });
 
+        if (!userEmail) {
+            throw new Error("No recipients defined");
+        }
+
         // 3. Enviar e-mail somente DEPOIS de criar a reserva
         await mailer.sendMail({
             to: userEmail,

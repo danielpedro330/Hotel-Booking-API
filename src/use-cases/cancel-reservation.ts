@@ -7,6 +7,7 @@ import { CancelReservationError } from "./error/cancel-reservation-error";
 interface CancelReservationUseCaseRequest {
   reservationId: string;
   userEmail: string;
+  userId: string
 }
 
 interface CancelReservationUseCaseResponse {
@@ -18,13 +19,18 @@ export class CancelReservationUseCase {
 
   async execute({
     reservationId,
-    userEmail
+    userEmail,
+    userId
   }: CancelReservationUseCaseRequest): Promise<CancelReservationUseCaseResponse> {
 
     const reservation = await this._reservationRepository.findById(reservationId);
 
     if (!reservation) {
       throw new Error("Reservation not found");
+    }
+
+    if (reservation.userId !== userId) {
+      throw new Error("You are not allowed to cancel this reservation.");
     }
 
     // regra das 48h

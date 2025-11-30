@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "tsx src/server.ts",
+    "test:e2e": "vitest run --project e2e",
+    "test:e2e:watch": "vitest --project e2e",
     "test:unit": "vitest run --project unit",
     "test:unit:watch": "vitest --project unit"
   },

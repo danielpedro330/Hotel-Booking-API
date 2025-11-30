@@ -7,7 +7,8 @@ interface RoomUseCaseRequest {
     number: string,  
     capacity: number
     price: number
-    file?: { file: NodeJS.ReadableStream };
+    file?: { file: NodeJS.ReadableStream } | null; // multipart
+    imageUrl?: string | null; // criação via JSON
 }
 
 interface RoomUseCaseResponse {
@@ -22,26 +23,27 @@ export class RoomUseCase {
         number,  
         capacity,
         price,
-        file
+        file,
+        imageUrl
     }: RoomUseCaseRequest): Promise<RoomUseCaseResponse> {
 
-        let imageUrl: string | null = null;
-
-        // Se tiver imagem, faz upload no Cloudinary
-        if (file) {
-            const uploadResult = await new Promise((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream(
-                    { folder: "Rooms" },
+        let finalImageUrl: string | null = imageUrl ?? null;
+        
+        // → Se houver arquivo, envia para Cloudinary
+        if (file?.file) {
+            const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
+                const upload = cloudinary.uploader.upload_stream(
+                    { folder: "hotels" },
                     (err, res) => {
-                        if (err) reject(err);
-                        else resolve(res);
+                        if (err) return reject(err);
+                        resolve(res as { secure_url: string });
                     }
                 );
 
-                file.file.pipe(stream);
+                file.file.pipe(upload);
             });
 
-            imageUrl = (uploadResult as any).secure_url;
+            finalImageUrl = uploadResult.secure_url;
         }
 
         const room = await this._roomRepository.create({
@@ -51,7 +53,7 @@ export class RoomUseCase {
             number,
             capacity,
             price,
-            imageUrl
+            imageUrl: finalImageUrl
         });
 
         return { room };
