@@ -8,5 +8,5 @@ export function reservationRoutes(app: FastifyInstance) {
 
     app.post('/reservations', createReservation)
 
-    app.patch('/reservations /:id/cancel', cancelReservation)
+    app.patch('/reservations/:id/cancel', cancelReservation)
 }

@@ -21,13 +21,11 @@ describe("Create reservation (e2e)", () => {
   });
 
   it("Should be able to create reservation", async () => {
-    // 1️⃣ Cria e autentica usuário
-    const { token } = await createAndAuthenticateUser(app);
+    const { token, user } = await createAndAuthenticateUser(app);
 
-    // 2️⃣ Cria hotel e sala
     const hotel = await prisma.hotel.create({
       data: {
-        id: "1",
+        id: crypto.randomUUID(),
         name: "Mainga",
         location: "Luanda, Angola"
       }
@@ -35,15 +33,14 @@ describe("Create reservation (e2e)", () => {
 
     const room = await prisma.room.create({
       data: {
-        id: "11",
-        number: "999999",
+        id: crypto.randomUUID(),
+        number: "101",
         capacity: 2,
-        price: 2000.0,
+        price: 2000,
         hotelId: hotel.id
       }
     });
 
-    // 3️⃣ Cria a reserva
     const response = await request(app.server)
       .post("/reservations")
       .set("authorization", `Bearer ${token}`)
@@ -51,9 +48,10 @@ describe("Create reservation (e2e)", () => {
         roomId: room.id,
         startDate: "2025-01-01",
         endDate: "2025-01-03",
-        status: "Confirmed"
+        status: "Confirmed",
+        userEmail: user.email
       });
-
+ 
     expect(response.status).toEqual(201);
     expect(response.body.message).toEqual("Reserva criada com sucesso.");
   }, 20000);

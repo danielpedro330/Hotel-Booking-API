@@ -26,7 +26,7 @@ export async function createReservation(request: FastifyRequest, reply: FastifyR
       error: "Usuário não encontrado ou sem e-mail cadastrado"
     });
   }
-
+  
   try {
     const reservationUseCase = makeReservationUseCase();
 

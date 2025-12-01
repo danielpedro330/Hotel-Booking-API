@@ -27,7 +27,6 @@ describe("Create reservation (e2e)", () => {
     // 2️⃣ Cria hotel e sala
     const hotel = await prisma.hotel.create({
       data: {
-        id: "hotel-1",
         name: "Mainga",
         location: "Luanda, Angola"
       }
@@ -35,7 +34,6 @@ describe("Create reservation (e2e)", () => {
 
     const room = await prisma.room.create({
       data: {
-        id: "room-1",
         number: "101",
         capacity: 2,
         price: 2000,
@@ -61,7 +59,7 @@ describe("Create reservation (e2e)", () => {
 
     // Opcional: verifica no banco
     const reservationInDb = await prisma.reservation.findFirst({
-      where: { roomId: room.id, userId: user.body.id }
+      where: { roomId: room.id, userId: user.id }
     });
     expect(reservationInDb).not.toBeNull();
   }, 20000);

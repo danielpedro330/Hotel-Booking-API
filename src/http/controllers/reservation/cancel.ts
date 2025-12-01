@@ -19,8 +19,10 @@ export async function cancelReservation(request: FastifyRequest, reply: FastifyR
   await cancelReservationUseCase.execute({
     reservationId: id,
     userEmail,
-    userId: request.user.sub, // saber quem está cancelando
+    userId: request.user.sub, 
   });
 
-  return reply.status(204).send(); // 204 = cancelado sem retornar conteúdo
+  return reply.status(200).send({
+    message: "Reserva cancelada com sucesso."
+  });
 }

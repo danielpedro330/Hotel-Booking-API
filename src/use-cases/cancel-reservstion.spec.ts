@@ -33,7 +33,8 @@ describe("Cancel Reservation Use Case", () => {
     const fakeReservation = {
       id: "res_01",
       startDate: futureStart,
-      endDate: futureEnd
+      endDate: futureEnd,
+      userId: "1"
     };
 
     reservationRepository.findById.mockResolvedValue(fakeReservation);
@@ -41,7 +42,8 @@ describe("Cancel Reservation Use Case", () => {
 
     const result = await sut.execute({
       reservationId: "res_01",
-      userEmail: "user@example.com"
+      userEmail: "daniel@gmail.com",
+      userId: "1"
     });
 
     expect(result.reservation).toEqual(fakeReservation);
@@ -56,7 +58,8 @@ describe("Cancel Reservation Use Case", () => {
     await expect(
       sut.execute({
         reservationId: "invalid",
-        userEmail: "user@example.com"
+        userEmail: "daniel@gmail.com",
+        userId: "1"
       })
     ).rejects.toThrowError("Reservation not found");
   });
@@ -68,13 +71,15 @@ describe("Cancel Reservation Use Case", () => {
     reservationRepository.findById.mockResolvedValue({
       id: "res_02",
       startDate: startSoon,
-      endDate: endSoon
+      endDate: endSoon,
+      userId: "1"
     });
 
     await expect(
       sut.execute({
         reservationId: "res_02",
-        userEmail: "user@example.com"
+        userEmail: "daniel@gmail.com",
+        userId: "1"
       })
     ).rejects.toBeInstanceOf(CancelReservationError);
 
