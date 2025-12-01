@@ -8,7 +8,8 @@
     "test:e2e": "vitest run --project e2e",
     "test:e2e:watch": "vitest --project e2e",
     "test:unit": "vitest run --project unit",
-    "test:unit:watch": "vitest --project unit"
+    "test:unit:watch": "vitest --project unit",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
