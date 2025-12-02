@@ -63,7 +63,7 @@ describe("Cancel reservation (e2e)", () => {
 
   const response = await request(app.server)
     .patch(`/reservations/${reservation.id}/cancel`)
-    .set("authorization", `Bearer ${token}`)
+    .set("Authorization", `Bearer ${token}`)
     .send({
       userEmail: 'daniel@gmail.com'
     });

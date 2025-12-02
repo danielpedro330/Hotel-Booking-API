@@ -43,7 +43,7 @@ describe("Create reservation (e2e)", () => {
 
     const response = await request(app.server)
       .post("/reservations")
-      .set("authorization", `Bearer ${token}`)
+      .set("Authorization", `Bearer ${token}`)
       .send({
         roomId: room.id,
         startDate: "2025-01-01",

@@ -14,9 +14,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Rule {
-  Admin
-  Member
+enum Role {
+  ADMIN
+  MEMBER
 }
 
 model User {
@@ -24,7 +24,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  rule Rule @default(Member)
+  role      Role @default(MEMBER)
   reservations Reservation[]
   createdAt DateTime @default(now())
 

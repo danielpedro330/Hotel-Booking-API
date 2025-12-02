@@ -9,21 +9,20 @@ import { hotelRoutes } from "./http/controllers/hotel/routes";
 import { roomRoutes } from "./http/controllers/room/routes";
 import { reservationRoutes } from "./http/controllers/reservation/routes";
 
-
 export const app = fastify()
 
 app.register(multipart, {
   limits: {
     fileSize: 10_000_000,
   },
-  attachFieldsToBody: false,
+  attachFieldsToBody: true,
 });
 
 app.register(fastifyJwt,{
   secret: env.JWT_SECRET,
   cookie: {
     cookieName: 'refreshToken',
-    signed: false
+    signed: false,
   },
   sign: {
     expiresIn: '10m'

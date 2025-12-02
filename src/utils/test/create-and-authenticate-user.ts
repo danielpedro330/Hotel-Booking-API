@@ -4,18 +4,13 @@ import { randomUUID } from "crypto";
 import { FastifyInstance } from "fastify";
 import request from "supertest";
 
-export async function createAndAuthenticateUser(app: FastifyInstance) {
-    /* const userResponse = await request(app.server).post("/users").send({
-        name: 'Daniel',
-        email: 'daniel@gmail.com',
-        password: '123456'
-    })*/
-
+export async function createAndAuthenticateUser(app: FastifyInstance, isAdmin = false) {
     const user = await prisma.user.create({
         data: {
             name: 'Daniel',
             email: `daniel@gmail${randomUUID()}.com`,
-            password: await hash('123456', 6)
+            password: await hash('123456', 6),
+            role: isAdmin ? 'ADMIN' : 'MEMBER'
         }
     })
 
@@ -24,7 +19,7 @@ export async function createAndAuthenticateUser(app: FastifyInstance) {
         password: '123456'
     })
 
-    const {token} = authResponse.body
+    const {token} = await authResponse.body
 
     return {
         token,
