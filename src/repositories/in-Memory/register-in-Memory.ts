@@ -1,7 +1,6 @@
-import { User, Prisma, Rule } from "@prisma/client";
+import { User, Prisma, Role } from "@prisma/client";
 import { UserRepository } from "../user-repository";
 import { randomUUID } from "node:crypto";
-import { email } from "zod";
 
 export class InMemoryUserReposytory implements UserRepository {
     public items: User[] = []
@@ -30,7 +29,7 @@ export class InMemoryUserReposytory implements UserRepository {
             name: data.name,
             email: data.email,
             password: data.password,
-            rule: Rule.Member,
+            rule: Role.MEMBER,
             createdAt: new Date()
         }
 
