@@ -2,6 +2,7 @@ import { Reservation, Prisma } from "@prisma/client";
 import { ReservationRepository } from "../reservation-repository";
 import { randomUUID } from "node:crypto";
 import { CancelReservationError } from "@/use-cases/error/cancel-reservation-error";
+import { Status } from "@/enum/status";
 
 export class InMemoryReservationRepository implements ReservationRepository {
     public items: Reservation[] = []
@@ -20,14 +21,18 @@ export class InMemoryReservationRepository implements ReservationRepository {
 
         return reservation
     }
+
     async cancel(id: string): Promise<Reservation> {
         const reservation = await this.items.find(item => item.id === id)
         if (!reservation) {
             throw new CancelReservationError()
         }
 
+        reservation.status = Status.cancelled
+
         return reservation 
     }
+
 
     async create(data: Prisma.ReservationCreateInput) {
         const reservation = {
