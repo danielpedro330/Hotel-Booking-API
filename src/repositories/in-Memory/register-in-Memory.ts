@@ -29,7 +29,7 @@ export class InMemoryUserReposytory implements UserRepository {
             name: data.name,
             email: data.email,
             password: data.password,
-            rule: Role.MEMBER,
+            role: Role.MEMBER,
             createdAt: new Date()
         }
 
